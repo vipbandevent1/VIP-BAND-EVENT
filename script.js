@@ -1,5 +1,5 @@
 // ========== VIP BAND - COMPLETE JAVASCRIPT ==========
-// ===== WITH AUTO-SAVE DATE/TIME (NO UPDATE BUTTON) =====
+// ===== WITH DIRECT UPI PAYMENT PAGE =====
 
 // Global variables for date & time
 let selectedDate = '';
@@ -327,7 +327,7 @@ function addDateTimeToContainer(container) {
   container.insertAdjacentHTML('beforeend', datetimeHTML);
 }
 
-// ===== UPI PAYMENT FUNCTION =====
+// ===== UPI PAYMENT FUNCTION - DIRECT PAYMENT PAGE =====
 function processUPIPayment() {
   if (bookingCart.length === 0) {
     showNotification('Please add items to your booking first!');
@@ -343,20 +343,25 @@ function processUPIPayment() {
   // Calculate 20% advance amount
   const advanceAmount = Math.round(totalAmount * 0.2);
   
-  // Create UPI payment URL
-  const upiUrl = `upi://pay?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment%20for%20Booking`;
+  // Create UPI payment link that opens in same tab
+  // Using PhonePe/Google Pay/BHIM UPI intent link that opens payment page
+  const upiLink = `https://phon pe.com/pay/?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment`;
+  
+  // Alternative: Direct BHIM UPI link (works on most phones)
+  const bhimLink = `upi://pay?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment`;
   
   // Show payment summary
   const paymentSummary = `UPI PAYMENT\n\nTotal Amount: ₹${totalAmount.toLocaleString()}\n20% Advance: ₹${advanceAmount.toLocaleString()}\n\nPay to: ${UPI_ID}`;
   
-  if (confirm(paymentSummary + '\n\nOpen UPI app for payment?')) {
-    // Try to open UPI app
-    window.location.href = upiUrl;
+  if (confirm(paymentSummary + '\n\nProceed to UPI payment page?')) {
+    // Directly open UPI payment page in current tab
+    // This will show UPI app chooser or open payment page
+    window.location.href = bhimLink;
     
-    // Fallback after 2 seconds if UPI app doesn't open
+    // Show instruction
     setTimeout(() => {
-      showNotification('If UPI app didn\'t open, please pay manually to ' + UPI_ID);
-    }, 2000);
+      showNotification('Select your UPI app to complete payment');
+    }, 1000);
   }
 }
 
