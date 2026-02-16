@@ -348,6 +348,7 @@ footer {
   font-style: italic;
 }
 
+/* ===== BOOKING SUMMARY BOX ===== */
 .booking-total {
   background: #fff;
   border: 1.5px solid #7777;
@@ -370,6 +371,52 @@ footer {
   margin-top: 10px;
 }
 
+/* ===== ADVANCE PAYMENT TEXT (छोटा) ===== */
+.advance-text {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  margin: 5px 0 10px 0;
+  font-style: italic;
+}
+
+/* ===== UPI PAYMENT BUTTON ===== */
+.btn-upi {
+  background: #4f6d7a;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.btn-upi i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.btn-upi:hover {
+  background: #3a5a6b;
+  transform: translateY(-2px);
+}
+
+/* ===== TRUSTED WEBSITE TEXT ===== */
+.trusted-website {
+  font-size: 12px;
+  font-family: 'Times New Roman', serif;
+  text-align: center;
+  color: #888;
+  margin: 5px 0 15px 0;
+  letter-spacing: 1px;
+  font-weight: normal;
+}
+
 .btn-confirm {
   background: #28a745;
   width: 100%;
@@ -378,16 +425,6 @@ footer {
 
 .btn-confirm:hover {
   background: #218838;
-}
-
-.btn-clear {
-  background: #dc3545;
-  width: 100%;
-  margin: 10px 0;
-}
-
-.btn-clear:hover {
-  background: #c82333;
 }
 
 /* ===== SERVICE PAGES ===== */
@@ -547,26 +584,6 @@ footer {
 
 .compact-input:focus {
   outline: none;
-}
-
-.compact-set {
-  background: #c9a227;
-  color: white;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.compact-set:hover {
-  background: #b59220;
-  transform: scale(1.05);
 }
 
 .compact-display {
@@ -818,4 +835,4 @@ footer {
   .service-details h3 {
     font-size: 22px;
   }
-}
+  }
