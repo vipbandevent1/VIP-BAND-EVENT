@@ -217,7 +217,7 @@
           <h3>Baraat On Wheel</h3>
           <p>Special decorated vehicle with music system for baraat procession.</p>
           <div class="price-section">
-            <p class="price">Price: ₹40,000 per day</p>
+            <p class="price">Price: ₹35,000 per day</p>
             <div class="quantity-control single-unit">
               <span class="single-note">(Single unit only)</span>
               <input type="hidden" id="baraat-qty" value="1">
@@ -251,12 +251,12 @@
           <h3>Cold Fire</h3>
           <p>Spectacular cold fire effect for stage and events.</p>
           <div class="price-section">
-            <p class="price">Price: ₹1,000 per day</p>
+            <p class="price">Price: ₹6,000 per day</p>
             <div class="quantity-control">
               <button onclick="updateQuantity('coldfire', -1)">-</button>
-              <input type="number" id="coldfire-qty" value="1" min="1" max="8" readonly>
+              <input type="number" id="coldfire-qty" value="8" min="1" max="15" readonly>
               <button onclick="updateQuantity('coldfire', 1)">+</button>
-              <span class="max-note">(Max: 8)</span>
+              <span class="max-note">(Max: 15)</span>
             </div>
             <button class="btn-add-to-cart" onclick="addToCart('coldfire', 'Cold Fire', 1000, document.getElementById('coldfire-qty').value)"><i class="fa-solid fa-cart-plus"></i> Add to Booking</button>
           </div>
@@ -353,11 +353,11 @@
             <p id="rath-desc">Beautifully decorated flower rath for weddings and processions.</p>
           </div>
           <div class="price-section">
-            <p class="price" id="rath-price">Price: ₹8,000 per day</p>
+            <p class="price" id="rath-price">Price: ₹11,000 per day</p>
             <div class="quantity-control single-unit">
               <span class="single-note">(Single unit only)</span>
               <input type="hidden" id="rath-qty" value="1">
-              <input type="hidden" id="rath-selected-price" value="8000">
+              <input type="hidden" id="rath-selected-price" value="11000">
               <input type="hidden" id="rath-selected-name" value="Flower Rath">
             </div>
             <button class="btn-add-to-cart" onclick="addRathToCart()"><i class="fa-solid fa-cart-plus"></i> Add to Booking</button>
