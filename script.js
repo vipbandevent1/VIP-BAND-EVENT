@@ -5,6 +5,9 @@
 let selectedDate = '';
 let selectedTime = '';
 
+// UPI ID for payment
+const UPI_ID = '7619000040@ybl';
+
 // ===== MENU FUNCTIONS =====
 function openMenu() {
   document.getElementById("menu").style.display = "flex";
@@ -324,19 +327,40 @@ function addDateTimeToContainer(container) {
   container.insertAdjacentHTML('beforeend', datetimeHTML);
 }
 
-function clearBooking() {
+// ===== UPI PAYMENT FUNCTION =====
+function processUPIPayment() {
   if (bookingCart.length === 0) {
-    showNotification('Booking is already empty!');
+    showNotification('Please add items to your booking first!');
     return;
   }
   
-  if (confirm('Are you sure you want to clear all items from your booking?')) {
-    bookingCart = [];
-    updateBookingDisplay();
-    showNotification('Booking cleared successfully!');
+  // Calculate total amount
+  let totalAmount = 0;
+  bookingCart.forEach(item => {
+    totalAmount += item.price * item.quantity;
+  });
+  
+  // Calculate 20% advance amount
+  const advanceAmount = Math.round(totalAmount * 0.2);
+  
+  // Create UPI payment URL
+  const upiUrl = `upi://pay?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment%20for%20Booking`;
+  
+  // Show payment summary
+  const paymentSummary = `UPI PAYMENT\n\nTotal Amount: ₹${totalAmount.toLocaleString()}\n20% Advance: ₹${advanceAmount.toLocaleString()}\n\nPay to: ${UPI_ID}`;
+  
+  if (confirm(paymentSummary + '\n\nOpen UPI app for payment?')) {
+    // Try to open UPI app
+    window.location.href = upiUrl;
+    
+    // Fallback after 2 seconds if UPI app doesn't open
+    setTimeout(() => {
+      showNotification('If UPI app didn\'t open, please pay manually to ' + UPI_ID);
+    }, 2000);
   }
 }
 
+// ===== CONFIRM BOOKING FUNCTION =====
 function confirmBooking() {
   if (bookingCart.length === 0) {
     showNotification('Please add items to your booking first!');
