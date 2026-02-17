@@ -1,5 +1,5 @@
 // ========== VIP BAND - COMPLETE JAVASCRIPT ==========
-// ===== WITH DIRECT UPI PAYMENT PAGE =====
+// ===== WITH AUTO-SAVE DATE/TIME (NO UPDATE BUTTON) =====
 
 // Global variables for date & time
 let selectedDate = '';
@@ -41,6 +41,11 @@ function openServicePage(serviceId) {
     // Special handling for Rath page
     if (serviceId === 'rath') {
       initRathCarousel();
+    }
+    
+    // Special handling for All Package page
+    if (serviceId === 'allpackage') {
+      initAllPackageCarousel();
     }
   }, 100);
 }
@@ -108,6 +113,58 @@ function addRathToCart() {
   const price = document.getElementById('rath-selected-price').value;
   const name = document.getElementById('rath-selected-name').value;
   addToCart('rath', name, parseInt(price), 1);
+}
+
+// ===== ALL PACKAGE SPECIAL FUNCTIONS =====
+function initAllPackageCarousel() {
+  const carousel = document.querySelector('#allpackage-page .carousel-images');
+  if (!carousel) return;
+  
+  const dots = document.querySelectorAll('#allpackage-page .dot');
+  const descriptions = document.querySelectorAll('#allpackage-page .package-description');
+  
+  // Hide all descriptions initially, show first one
+  descriptions.forEach((desc, idx) => {
+    if (idx === 0) {
+      desc.style.display = 'block';
+    } else {
+      desc.style.display = 'none';
+    }
+  });
+  
+  carousel.addEventListener('scroll', () => {
+    const scrollLeft = carousel.scrollLeft;
+    const imageWidth = carousel.clientWidth;
+    const activeIndex = Math.round(scrollLeft / imageWidth);
+    
+    // Update dots
+    dots.forEach((dot, idx) => {
+      if (idx === activeIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+    
+    // Update description
+    descriptions.forEach((desc, idx) => {
+      if (idx === activeIndex) {
+        desc.style.display = 'block';
+      } else {
+        desc.style.display = 'none';
+      }
+    });
+  });
+  
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      const imageWidth = carousel.clientWidth;
+      carousel.scrollTo({
+        left: index * imageWidth,
+        behavior: 'smooth'
+      });
+    });
+  });
 }
 
 // ===== FORMAT TIME FUNCTION (12-hour format with AM/PM) =====
@@ -327,7 +384,7 @@ function addDateTimeToContainer(container) {
   container.insertAdjacentHTML('beforeend', datetimeHTML);
 }
 
-// ===== UPI PAYMENT FUNCTION - DIRECT PAYMENT PAGE =====
+// ===== UPI PAYMENT FUNCTION =====
 function processUPIPayment() {
   if (bookingCart.length === 0) {
     showNotification('Please add items to your booking first!');
@@ -343,25 +400,20 @@ function processUPIPayment() {
   // Calculate 20% advance amount
   const advanceAmount = Math.round(totalAmount * 0.2);
   
-  // Create UPI payment link that opens in same tab
-  // Using PhonePe/Google Pay/BHIM UPI intent link that opens payment page
-  const upiLink = `https://phon pe.com/pay/?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment`;
-  
-  // Alternative: Direct BHIM UPI link (works on most phones)
-  const bhimLink = `upi://pay?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment`;
+  // Create UPI payment URL
+  const upiUrl = `upi://pay?pa=${UPI_ID}&pn=VIP%20BAND&am=${advanceAmount}&cu=INR&tn=Advance%20Payment%20for%20Booking`;
   
   // Show payment summary
   const paymentSummary = `UPI PAYMENT\n\nTotal Amount: ₹${totalAmount.toLocaleString()}\n20% Advance: ₹${advanceAmount.toLocaleString()}\n\nPay to: ${UPI_ID}`;
   
-  if (confirm(paymentSummary + '\n\nProceed to UPI payment page?')) {
-    // Directly open UPI payment page in current tab
-    // This will show UPI app chooser or open payment page
-    window.location.href = bhimLink;
+  if (confirm(paymentSummary + '\n\nOpen UPI app for payment?')) {
+    // Try to open UPI app
+    window.location.href = upiUrl;
     
-    // Show instruction
+    // Fallback after 2 seconds if UPI app doesn't open
     setTimeout(() => {
-      showNotification('Select your UPI app to complete payment');
-    }, 1000);
+      showNotification('If UPI app didn\'t open, please pay manually to ' + UPI_ID);
+    }, 2000);
   }
 }
 
