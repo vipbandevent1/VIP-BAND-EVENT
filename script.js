@@ -1,5 +1,5 @@
 // ========== VIP BAND - COMPLETE JAVASCRIPT ==========
-// ===== WITH AUTO-SAVE DATE/TIME (NO UPDATE BUTTON) =====
+// ===== WITH SLOW SCROLLING (800ms) =====
 
 // Global variables for date & time
 let selectedDate = '';
@@ -60,6 +60,30 @@ function closeServicePage() {
   resetQuantities();
 }
 
+// ===== SLOW SCROLL FUNCTION (800ms) =====
+function slowScrollTo(element, targetPosition) {
+  const startPosition = element.scrollLeft;
+  const distance = targetPosition - startPosition;
+  const duration = 800; // 800ms = धीमी scroll
+  let startTime = null;
+
+  function animation(currentTime) {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const progress = Math.min(timeElapsed / duration, 1);
+    
+    // Easing function - smooth slow motion ke liye
+    const easeProgress = 1 - Math.pow(1 - progress, 3); // ease-out
+    element.scrollLeft = startPosition + (distance * easeProgress);
+    
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  }
+
+  requestAnimationFrame(animation);
+}
+
 // ===== RATH SPECIAL FUNCTIONS =====
 function initRathCarousel() {
   const carousel = document.querySelector('#rath-carousel .carousel-images');
@@ -101,10 +125,7 @@ function initRathCarousel() {
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       const imageWidth = carousel.clientWidth;
-      carousel.scrollTo({
-        left: index * imageWidth,
-        behavior: 'smooth'
-      });
+      slowScrollTo(carousel, index * imageWidth);
     });
   });
 }
@@ -159,10 +180,7 @@ function initAllPackageCarousel() {
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       const imageWidth = carousel.clientWidth;
-      carousel.scrollTo({
-        left: index * imageWidth,
-        behavior: 'smooth'
-      });
+      slowScrollTo(carousel, index * imageWidth);
     });
   });
 }
@@ -439,13 +457,13 @@ function confirmBooking() {
   const currentDate = getCurrentDate();
   const currentTime = getCurrentTime();
   
-  // FORMAT SCHEDULED DATE AND TIME - जो यूजर ने सेट किया है
-  const scheduledDateRaw = selectedDate; // YYYY-MM-DD
-  const scheduledTimeRaw = selectedTime; // HH:MM
+  // FORMAT SCHEDULED DATE AND TIME
+  const scheduledDateRaw = selectedDate;
+  const scheduledTimeRaw = selectedTime;
   
   // Format for display
   const [year, month, day] = scheduledDateRaw.split('-');
-  const scheduledDisplayDate = `${day}/${month}/${year}`; // DD/MM/YYYY
+  const scheduledDisplayDate = `${day}/${month}/${year}`;
   
   // Format time with AM/PM
   const [hours, minutes] = scheduledTimeRaw.split(':');
@@ -465,7 +483,7 @@ function confirmBooking() {
   
   alert(summary);
   
-  // WhatsApp message with CORRECT scheduled time
+  // WhatsApp message
   let itemsList = '';
   bookingCart.forEach(item => {
     itemsList += `• ${item.name} (Qty: ${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString()}\n`;
@@ -510,7 +528,7 @@ function showNotification(message) {
   setTimeout(() => { notification.remove(); style.remove(); }, 2300);
 }
 
-// ===== CAROUSEL FUNCTIONS =====
+// ===== CAROUSEL FUNCTIONS WITH SLOW SCROLLING =====
 function initCarousels() {
   document.querySelectorAll('.carousel').forEach(carousel => {
     const imagesContainer = carousel.querySelector('.carousel-images');
@@ -534,10 +552,7 @@ function initCarousels() {
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
         const imageWidth = imagesContainer.clientWidth;
-        imagesContainer.scrollTo({
-          left: index * imageWidth,
-          behavior: 'smooth'
-        });
+        slowScrollTo(imagesContainer, index * imageWidth);
       });
     });
   });
